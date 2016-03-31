@@ -29,6 +29,18 @@ var TodoActions = {
       text: text
     });
   },
+  searchselection: function(text) {
+    AppDispatcher.dispatch({
+      actionType: TodoConstants.SEARCH_SELECTION,
+      text: text
+    });
+  },
+  addTerroir: function(text) {
+    AppDispatcher.dispatch({
+      actionType: TodoConstants.ADD_TERROIR,
+      text: text
+    });
+  },
 
   /**
    * @param  {string} id The ID of the ToDo item
@@ -42,7 +54,7 @@ var TodoActions = {
     });
   },
 
-  /**
+  /**destroy
    * Toggle whether a single ToDo is complete
    * @param  {object} todo
    */

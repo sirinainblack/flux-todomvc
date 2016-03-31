@@ -11,28 +11,76 @@ var React = require('react');
 var ReactDom = require('react-dom');
 var TodoApp = require('./components/TodoApp.react');
 var Login = require('./components/Login.react');
-
 var Router = require('react-router/lib/Router');
 var Route = require('react-router/lib/Route');
+var hashHistory = require('react-router/lib/hashHistory');
 var IndexRoute = require('react-router/lib/IndexRoute');
-
+var injectTapEventPlugin = require('react-tap-event-plugin');
+var Link = require('react-router/lib/Link');
+var ListExample = require('./components/List.react')
+var MUI = require('material-ui');
+var AppBar = MUI.AppBar;
+var LeftNav = MUI.LeftNav;
+var MenuItem = MUI.MenuItem;
+var FlatButton = MUI.FlatButton
+var Search = require('./components/search.react');
 const App = React.createClass({
+
+
+    getInitialState: function() {
+        return {open : false}
+    },
+    handleToggle: function () {
+
+        console.log('hi yy!');
+    },
+    componentDidMount: function() {
+        injectTapEventPlugin();
+
+    },
     render: function () {
         return (
             <div>
-                <h1>App</h1>
-                <Login/>
+                <AppBar
+                    title="Mon Terroir"
+                    onRightIconButtonTouchTap={this._handleClick}
+                    iconElementRight={<FlatButton label="Save" />}
+                />
+                <LeftNav
+                    docked={false}
+                    width={400}
+                    open={this.state.open}
+                    onRequestChange={this.reqchange}
+                >
+                    <MenuItem onClick={this.handleClose}><Link to="/Login">Login</Link></MenuItem>
+                    <MenuItem onTouchTap={this.handleClose}><Link to="/TodoApp">TodoApp</Link></MenuItem>
+
+                    {this.props.children}
+                </LeftNav>
+                <nav>
+                    <ul>
+                        <li><Link to="/Login">Login</Link></li>
+                        <li><Link to="/TodoApp">App</Link></li>
+                        <li><Link to="/Search">Search</Link></li>
+                        <li><Link to="/List">List</Link></li>
+
+                    </ul>
+                </nav>
                 {this.props.children}
             </div>
         );
     }
 });
 ReactDom.render(
-    <Router>
+    <Router history={hashHistory}>
         <Route path="/" component={App} >
+            <IndexRoute component={TodoApp} />
 
             <Route path="TodoApp" component={TodoApp}/>
             <Route path="Login" component={Login}/>
+            <Route path="Search" component={Search}/>
+            <Route path="List" component={ListExample}/>
+
 
 
         </Route>

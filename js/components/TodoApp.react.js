@@ -11,16 +11,16 @@
  * This component operates as a "Controller-View".  It listens for changes in
  * the TodoStore and passes the new data to its children.
  */
-
+var React = require('react');
 var Footer = require('./Footer.react');
 var Header = require('./Header.react');
 var MainSection = require('./MainSection.react');
-var React = require('react');
 var  $  = require('jquery');
 var  jQuery  = require('jquery');
 var TodoStore = require('../stores/TodoStore');
-var injectTapEventPlugin =require('react-tap-event-plugin');
 var Login = require('./Login.react');
+
+var Link = require('react-router/lib/Link');
 window.$ = $;
 window.jQuery = jQuery;
 /**
@@ -31,7 +31,8 @@ function getTodoState() {
     allTodos: TodoStore.getAll(),
     areAllComplete: TodoStore.areAllComplete(),
     username: TodoStore.getUsername(),
-    terrList: TodoStore.getterrList()
+    terrList: TodoStore.getterrList(),
+    open : false
   };
 }
 
@@ -40,10 +41,20 @@ var TodoApp = React.createClass({
   getInitialState: function() {
     return getTodoState();
   },
+  handleToggle: function () {
+    this.setState({open: !this.state.open});
+    console.log('hi !');
+  },
 
+  handleClose: function () {
+    this.setState({open: true});
+  },
+  reqchange: function(open){
+    console.log("something");
+    this.setState({open : !this.state.open})
+  },
   componentDidMount: function() {
     TodoStore.addChangeListener(this._onChange);
-    injectTapEventPlugin();
 
   },
 
@@ -55,16 +66,13 @@ var TodoApp = React.createClass({
    * @return {object}
    */
   render: function() {
+
     return (
       <div>
-
-        <Header username={this.state.username}  list ={this.state.terrList}/>
         <MainSection
-          allTodos={this.state.allTodos}
+          allTerroirs={this.state.terrList}
           areAllComplete={this.state.areAllComplete}
         />
-        <Footer allTodos={this.state.allTodos} />
-        {this.props.children}
       </div>
     );
   },

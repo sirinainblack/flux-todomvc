@@ -15,11 +15,10 @@ var TodoConstants = require('../constants/TodoConstants');
 var assign = require('object-assign');
 var $ = require('jquery');
 var CHANGE_EVENT = 'change';
-var browserHistory = require('react-router/lib/browserHistory');
-
+var searcharray = [];
 var username= '';
-var _todos = {};
-var terrList =['empty'];
+var _todos = [];
+var terrList =[];
 function login(text) {
   // Hand waving here -- not showing how this interacts with XHR or persistent
   // server-side storage.
@@ -38,7 +37,6 @@ function login(text) {
         console.log('auth reussie !');
         username = text;
         terrList = data;
-        browserHistory.push('/');
 
       }
     }.bind(
@@ -51,6 +49,13 @@ function login(text) {
 
 }
 
+function addterroir(text) {
+  // Hand waving here -- not showing how this interacts with XHR or persistent
+  // server-side storage.
+  // Using the current timestamp + random number in place of a real id.
+
+  terrList.push(text)
+}
 /**
  * Create a TODO item.
  * @param  {string} text The content of the TODO
@@ -67,6 +72,9 @@ function create(text) {
   };
 }
 
+function pushsearch(text) {
+  searcharray.push(text);
+}
 /**
  * Update a TODO item.
  * @param  {string} id
@@ -93,7 +101,11 @@ function updateAll(updates) {
  * @param  {string} id
  */
 function destroy(id) {
-  delete _todos[id];
+  var index = _todos.indexOf(id) +1;
+  terrList.splice(index, 1);
+
+
+
 }
 
 /**
@@ -126,6 +138,9 @@ var TodoStore = assign({}, EventEmitter.prototype, {
    * Get the entire collection of TODOs.
    * @return {object}
    */
+  getSearchList: function(){
+    return searcharray;
+  },
   getAll: function() {
     return _todos;
   },
@@ -160,7 +175,6 @@ AppDispatcher.register(function(action) {
 
   switch(action.actionType) {
     case TodoConstants.TODO_LOGIN:
-        console.log("hello from dispatcher register");
       text = action.text.trim();
       if (text !== '') {
         login(text);
@@ -175,6 +189,7 @@ AppDispatcher.register(function(action) {
         TodoStore.emitChange();
       }
       break;
+
 
     case TodoConstants.TODO_TOGGLE_COMPLETE_ALL:
       if (TodoStore.areAllComplete()) {
@@ -195,10 +210,24 @@ AppDispatcher.register(function(action) {
       TodoStore.emitChange();
       break;
 
+    case TodoConstants.ADD_TERROIR:
+      text = action.text.trim();
+      if (text !== '') {
+        addterroir( text);
+        TodoStore.emitChange();
+      }
+      break;
+    case TodoConstants.SEARCH_SELECTION:
+      text = action.text.trim();
+      if (text !== '') {
+        pushsearch( text);
+        TodoStore.emitChange();
+      }
+      break;
     case TodoConstants.TODO_UPDATE_TEXT:
       text = action.text.trim();
       if (text !== '') {
-        update(action.id, {text: text});
+        update(action.id,  text);
         TodoStore.emitChange();
       }
       break;

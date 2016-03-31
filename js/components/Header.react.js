@@ -9,9 +9,29 @@
 
 var React = require('react');
 var TodoActions = require('../actions/TodoActions');
-var TodoTextInput = require('./TodoTextInput.react');
+var  $  = require('jquery');
+var Typeahead = require('react-typeahead').Typeahead;
 
 var Header = React.createClass({
+    getInitialState: function(){
+      return {searcharray : []}
+    },
+
+    componentDidMount: function(){
+        $.ajax({
+            url: "http://localhost:3000/terroirs/search",
+            type: 'GET',
+            data: {'name': ''},
+            success: function (data) {
+                console.log("success")
+               this.setState({searcharray:data})
+            }.bind(this),
+            error: function (xhr, status, err) {
+                console.log("didnt connect")
+                console.error(this.props.url, status, err.toString());
+            }.bind(this)
+        });
+    },
 
   /**
    * @return {object}
@@ -19,27 +39,22 @@ var Header = React.createClass({
   render: function() {
     return (
       <header id="header">
-        <h1>todos</h1>
+        <h1>Search for terroirs</h1>
           <h2>{this.props.username}</h2>
-        <TodoTextInput
-          id="new-todo"
-          placeholder="What needs to be done?"
-          onSave={this._onSave}
-        />
+          <Typeahead
+              options={this.state.searcharray}
+              maxVisible={5}
+              onOptionSelected={this.itemselected}
+          />
+
       </header>
     );
   },
 
-  /**
-   * Event handler called within TodoTextInput.
-   * Defining this here allows TodoTextInput to be used in multiple places
-   * in different ways.
-   * @param {string} text
-   */
-  _onSave: function(text) {
-      console.log("this is the text:  " + text);
+
+  itemselected: function(text) {
     if (text.trim()){
-      TodoActions.create(text);
+      TodoActions.searchselection(text);
     }
 
   }

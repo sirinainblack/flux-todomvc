@@ -8,6 +8,8 @@ var TextField = MUI.TextField;
 var RaisedButton = MUI.RaisedButton;
 var TodoActions = require('../actions/TodoActions');
 var ReactPropTypes = React.PropTypes;
+var Link = require('react-router/lib/Link');
+
 var ENTER_KEY_CODE = 13;
 const style = {
     margin: 12,
@@ -48,6 +50,7 @@ var Login = React.createClass({
         });
     },
     _onKeyDown: function(event) {
+        console.log("key down");
         if (event.keyCode === ENTER_KEY_CODE) {
             this._save();
         }
@@ -67,8 +70,8 @@ var Login = React.createClass({
                         value={this.state.value}
                     />
                     <RaisedButton label="Log In" primary={true} style={style} onTouchTap={this._onKeyDown} />
-
                 </div>
+                <Link to="/TodoApp"> Continue</Link>
             </div>
             </div>
         );

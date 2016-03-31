@@ -17,7 +17,7 @@ var classNames = require('classnames');
 var TodoItem = React.createClass({
 
   propTypes: {
-   todo: ReactPropTypes.object.isRequired
+   todo: ReactPropTypes.string.isRequired
   },
 
   getInitialState: function() {
@@ -37,8 +37,7 @@ var TodoItem = React.createClass({
       input =
         <TodoTextInput
           className="edit"
-          onSave={this._onSave}
-          value={todo.text}
+          value={todo}
         />;
     }
 
@@ -61,8 +60,8 @@ var TodoItem = React.createClass({
             checked={todo.complete}
             onChange={this._onToggleComplete}
           />
-          <label onDoubleClick={this._onDoubleClick}>
-            {todo.text}
+          <label >
+            {todo}
           </label>
           <button className="destroy" onClick={this._onDestroyClick} />
         </div>
@@ -75,9 +74,7 @@ var TodoItem = React.createClass({
     TodoActions.toggleComplete(this.props.todo);
   },
 
-  _onDoubleClick: function() {
-    this.setState({isEditing: true});
-  },
+
 
   /**
    * Event handler called within TodoTextInput.

@@ -14,7 +14,7 @@ var TodoActions = require('../actions/TodoActions');
 var Footer = React.createClass({
 
   propTypes: {
-    allTodos: ReactPropTypes.object.isRequired
+    allTodos: ReactPropTypes.array.isRequired
   },
 
   /**
