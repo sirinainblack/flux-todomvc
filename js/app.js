@@ -44,7 +44,7 @@ const App = React.createClass({
                 <AppBar
                     title="Mon Terroir"
                     onRightIconButtonTouchTap={this._handleClick}
-                    iconElementRight={<FlatButton label="Save" />}
+                    iconElementRight={<FlatButton label="Sign Out" />}
                 />
                 <LeftNav
                     docked={false}
